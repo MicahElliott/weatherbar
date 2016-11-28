@@ -4,7 +4,6 @@
 #
 # Dependencies: zsh, jq, curl, personal openweathermap api key
 
-
 wfile=/tmp/weather.txt
 truncate -s0 $wfile
 
@@ -20,21 +19,23 @@ present="api.openweathermap.org/data/2.5/weather?$cityid&$apikey&$fmt"
 threehr="api.openweathermap.org/data/2.5/forecast/city?$cityid&$apikey&$fmt"
 forecast="api.openweathermap.org/data/2.5/forecast/daily?$cityid&$apikey&$fmt"
 
-# Condition codes
-# https://openweathermap.org/weather-conditions
-
 # Print-append to weather file
 pf() { print -n $* >> $wfile }
 
-# Convert from kelvin to Fahrenheit (NIU; see WEATHER_UNITS above)
+# Convert from Kelvin to Fahrenheit (NIU; see WEATHER_UNITS above)
 tof() { k=$1; printf '%0.0f' $(( 9/5. * (k - 273) + 32 )) }
 
 # Convert epoch to present time
 totime() { date -d @$1 +%H%M }
 
-# https://openweathermap.org/weather-conditions
-# Thunderstorm, Drizzle, Rain, Snow, Atmos, Clear/None, Clouds, Extreme, Misc
-# I invented these 2-char codes that resemble above categories
+# Condition codes https://openweathermap.org/weather-conditions
+# Thunderstorm, Drizzle, Rain, Snow, Atmos, Clear/None, Clouds,
+# Extreme, Misc I invented these 2-char codes that resemble above
+# categories.  The first char represents the condition, the second is
+# the severity.  Severities are a simplified assortment of Light,
+# Moderate, Heavy, Xtreme, Freezing, Storm, Rainy.  Atmosphere (700)
+# is a special condition involving Mist, Smog, Haze Dust, Fog,
+# Tornado.  The additional (900) are Misc.
 declare -A condtab
 condtab=(
     200 TL 201 TM 202 TH 210 TL 211 TM 212 TH 221 TH 231 TL 231 TL 232 TM
@@ -77,7 +78,7 @@ for i in {1..3}; do
 done
 
 ### Forecast
-# | RH5143 NC4841 RL4840 EC4438"
+# | RH5143 NC4841 RL4840 EC4438
 parms='.list[].weather[0].id, .list[].temp.min, .list[].temp.max'
 vals=( $(curl -s $forecast |jq -r $parms) )
 
