@@ -3,22 +3,23 @@
 Weatherbar is a "widget" for
 i3bar/[i3status](https://github.com/i3/i3status).
 
-Weatherbar prints a concise display of current and forecasted
-weather.  For example, the following shows three sections for
-Beaverton, OR, USA, for sunset/sunrise and present conditions (Rain
-Heavy, 50 degrees F, Wind 18 mph, Humidity 81); the next 9 hours (Rain
-Moderate and Heavy, temps 50 and 49); and the next six days of highs
-and lows.
+**Weatherbar prints a concise display of current and forecasted
+weather.** For example, the following shows three sections for
+Beaverton, OR, USA, for _sunset/sunrise_ and _present conditions_
+(Rain Heavy, 50 degrees F, Wind 18 mph, Humidity 81); the _next 9
+hours_ (Rain Moderate and Heavy, temps 50 and 49); and the _next six
+days_ of highs and lows.
 
     0724-1632 RH50.18.81 | RM50 RH49 RM49 | RH5149 RL4841 RM4741 RL4539 NC4541 RM453
 
-The above tells me I probably won't be going for a run for the next
-several days.  See the source for a little more detail on the weather
-conditions mnemonics.
+The above tells me I probably won't be going for a run or bike ride
+for the next several days.  See the source for a little more detail on
+the weather conditions mnemonics.
 
-It's should be enough to update every 15 or 30 mintes.  Although it
-may take a second or two to run, the status bar will be very quick to
-update every second or few since it's only reading a temporary file.
+It should be enough to **update (run) every 15 or 30 minutes**.
+Although it may be slow to run (a second or two), the status bar
+itself will be very quick to update every second or few since it's
+only reading a temporary file — not calling anything.
 
 
 ## Config
@@ -37,6 +38,11 @@ for Fahrenheit (`imperial` (default)), Celsius (`metric`), or Kelvin
 
 
 ## Run it
+
+First install a few dependencies: zsh,
+[jq](https://stedolan.github.io/jq/), and curl.
+
+Copy/clone `weatherbar.zsh` to somewhere on your path.
 
 Put Weatherbar into your crontab to run every half-hour.
 
