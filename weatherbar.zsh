@@ -29,13 +29,18 @@ tof() { k=$1; printf '%0.0f' $(( 9/5. * (k - 273) + 32 )) }
 totime() { date -d @$1 +%H%M }
 
 # Condition codes https://openweathermap.org/weather-conditions
-# Thunderstorm, Drizzle, Rain, Snow, Atmos, Clear/None, Clouds,
-# Extreme, Misc I invented these 2-char codes that resemble above
-# categories.  The first char represents the condition, the second is
-# the severity.  Severities are a simplified assortment of Light,
-# Moderate, Heavy, Xtreme, Freezing, Storm, Rainy.  Atmosphere (700)
-# is a special condition involving Mist, Smog, Haze Dust, Fog,
-# Tornado.  The additional (900) are Misc.
+#   Thunderstorm, Drizzle, Rain, Snow, Atmos, Clear/None, Clouds,
+#   Extreme, Misc
+#
+# I invented these 2-char codes that resemble above categories.  The
+# first char represents the condition, the second is the severity.
+#
+# Severities are a simplified assortment of:
+#   Light, Moderate, Heavy, Xtreme, Freezing, Storm, Rainy
+#
+# Atmosphere (700) is a special condition involving:
+#   Mist, Smog, Haze, Dust, Fog, Tornado
+# The additional (900) are Misc.
 declare -A condtab
 condtab=(
     200 TL 201 TM 202 TH 210 TL 211 TM 212 TH 221 TH 231 TL 231 TL 232 TM
@@ -65,6 +70,9 @@ city=$vals[8]
 # print $cond T$temp W$wspeed H$hum $srise-$sset
 pf $srise-$sset $cond$temp.$wspeed.$hum
 
+# NOTE: temps will not always be 2-digits (could be 1 or 3), and could
+# also be negative.
+
 ### 3-hr (x3)
 # | RL46 RM44 RH43
 parms='
@@ -87,5 +95,5 @@ for i in {1..7}; do
     cond=$condtab[$vals[i]]
     lo=$(printf '%0.0f' $vals[i+7])
     hi=$(printf '%0.0f' $vals[i+14])
-    pf " $cond$hi$lo"
+    pf " $cond$lo$hi"
 done
